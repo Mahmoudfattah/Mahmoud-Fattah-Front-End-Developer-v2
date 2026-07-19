@@ -162,8 +162,9 @@ export default function ContributionsCalendar() {
           }
 
           .calendar-scroll {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            overflow-x: auto; /* أو scroll، حسب اللي عندك */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge القديم */
           }
         `}
       </style>
