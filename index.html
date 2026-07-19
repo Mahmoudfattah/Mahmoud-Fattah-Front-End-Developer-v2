@@ -22,7 +22,7 @@
     <meta name="description" content="Front-End Engineer skilled in React, Next.js, and TypeScript. Explore my portfolio to see modern, responsive web applications." />
     <meta name="keywords" content="React, Next.js, TypeScript, Front-End Developer, Mahmoud Fattah, Portfolio, UI/UX, Tailwind CSS" />
     <meta name="author" content="Mahmoud Fattah" />
-    <link rel="canonical" href="https://mahmoudfattah.netlify.app" />
+    <link rel="canonical" href="https://YOUR-DOMAIN-HERE.vercel.app" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="Mahmoud Fattah | Front-End Engineer" />
@@ -30,14 +30,14 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mahmoud Fattah Portfolio" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:url" content="https://mahmoudfattah.netlify.app" />
-    <meta property="og:image" content="https://mahmoudfattah.netlify.app/og-image.png" />
+    <meta property="og:url" content="https://YOUR-DOMAIN-HERE.vercel.app" />
+    <meta property="og:image" content="https://YOUR-DOMAIN-HERE.vercel.app/og-image.png" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Mahmoud Fattah | Front-End Engineer" />
     <meta name="twitter:description" content="Explore Mahmoud's work in modern web development using React and Next.js." />
-    <meta name="twitter:image" content="https://mahmoudfattah.netlify.app/og-image.png" />
+    <meta name="twitter:image" content="https://YOUR-DOMAIN-HERE.vercel.app/og-image.png" />
     <meta name="twitter:creator" content="@mo__fattah" />
 
     <!-- Social -->
@@ -45,18 +45,27 @@
     <link rel="me" href="https://github.com/Mahmoudfattah" />
     <link rel="me" href="https://www.instagram.com/mo__fattah/" />
 
-    <!-- Icon -->
-    <link rel="icon" href="/icon5.png" type="image/png" />
+    <!-- Icons -->
+    <link rel="icon" href="/icon5.png" type="image/png" sizes="any" />
+    <!-- Confirm these two files exist in public/ — apple-touch-icon should
+         be a 180x180 PNG with no transparency for correct iOS home-screen
+         rendering. If you don't have one yet, this line is harmless (browser
+         falls back), but worth adding for a full Best Practices score. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preload the LCP image (Hero avatar) so the browser starts fetching
+         it immediately, before React mounts — one of the highest-leverage
+         LCP fixes available for an image-based hero. -->
+    <link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />
 
     <!-- Fonts -->
- <!-- Fonts -->
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-<link href="https://api.fontshare.com/v2/css?f[]=switzer@700&f[]=satoshi@400,600&f[]=bevellier@500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@700&f[]=satoshi@400,600&f[]=bevellier@500&display=swap" rel="stylesheet" />
 
-<!-- سيبها بس لو Kaushan Script مستخدمة فعلاً -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet" />
+    <!-- سيبها بس لو Kaushan Script مستخدمة فعلاً -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet" />
 
     <!-- JSON-LD Schema -->
     <script type="application/ld+json">
@@ -66,8 +75,8 @@
       "name": "Mahmoud Fattah",
       "jobTitle": "Front-End Engineer",
       "description": "Front-End Engineer specializing in React, Next.js, TypeScript, GSAP and modern UI/UX animations.",
-      "url": "https://mahmoudfattah.netlify.app",
-      "image": "https://mahmoudfattah.netlify.app/profile.jpg",
+      "url": "https://YOUR-DOMAIN-HERE.vercel.app",
+      "image": "https://YOUR-DOMAIN-HERE.vercel.app/profile.jpg",
       "sameAs": [
         "https://github.com/Mahmoudfattah",
         "https://www.linkedin.com/in/mahmoud-fattah-a541b0262/",
