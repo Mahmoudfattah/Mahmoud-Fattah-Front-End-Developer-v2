@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // Section 7/8 — Projects
 // Matches the reference's grid card layout exactly: image, title + status badge,
@@ -95,7 +95,7 @@ const projects = [
     title: "CollabFlow",
     role: "Full Stack Developer",
     status: "draft",
-     style: { objectPosition: "0px 5px ", transform: "scale(1.1)" },
+     style: { objectPosition: "0px 5px ", transform: "scale(.9)" },
     // TODO: description/tech/live still need confirmation from you — see note below
     description:
       "A real-time SaaS project management tool for teams — boards, tasks, and live collaboration.",
@@ -247,11 +247,23 @@ function ProjectCard({ project }) {
 
 export default function Projects() {
   const [page, setPage] = useState(1);
+
+   const sectionRef = useRef(null);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [page]);
+ 
   const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
   const visible = projects.slice((page - 1) * PROJECTS_PER_PAGE, page * PROJECTS_PER_PAGE);
 
   return (
-    <section id="projects" className="">
+    <section id="projects" ref={sectionRef} className="">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
         <span
           className="rounded-lg px-3 py-1 text-sm"
