@@ -44,7 +44,7 @@ const projects = [
     description:
       "A bilingual (Arabic/English) café website with a scroll-animated menu timeline, an accordion experience section with infinite photo marquees, and full dark/light theming built on CSS custom properties.",
     tech: ["React", "Redux Toolkit", "React Router", "Tailwind CSS", "Framer Motion", "GSAP"],
-    live: "https://the-rock-cafe.netlify.app/",
+    live: "https://the-rock-cafe.vercel.app/",
     github: "https://github.com/Mahmoudfattah/THE-ROCK-CAFE",
     // NOTE: fixed the stray space in this filename ("cafe .webp" -> "cafe.webp").
     // The actual file in public/imagesProjects/ needs to be renamed to match,
@@ -60,7 +60,7 @@ const projects = [
     description:
       "A modern, animated personal portfolio with an intro splash screen, smooth-scroll navigation, and interactive About, Services, Projects, and Skills sections — featuring Lottie animations, a custom cursor, Framer Motion transitions, and a downloadable CV.",
     tech: ["React", "Vite", "Framer Motion", "Tailwind CSS", "Lottie", "Lenis", "Matter.js"],
-    live: "https://mahmoudfattah.netlify.app/",
+    live: "https://mahmoud-fattah-front-end-developer.vercel.app/",
     github: "https://github.com/Mahmoudfattah/Mahmoud-Fattah-Front-End-Developer",
     image: "/imagesProjects/portiflio.webp",
   },
