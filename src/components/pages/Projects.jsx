@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Section 7/8 — Projects
 // Matches the reference's grid card layout exactly: image, title + status badge,
