@@ -95,6 +95,7 @@ const projects = [
     title: "CollabFlow",
     role: "Full Stack Developer",
     status: "draft",
+     style: { objectPosition: "0px 5px ", transform: "scale(1.1)" },
     // TODO: description/tech/live still need confirmation from you — see note below
     description:
       "A real-time SaaS project management tool for teams — boards, tasks, and live collaboration.",
