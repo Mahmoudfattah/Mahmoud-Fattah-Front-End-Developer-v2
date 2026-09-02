@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { Link } from "react-router-dom"; // <-- NEW: Added React Router Link
 import {
   AnimatePresence,
   motion,
@@ -202,9 +203,10 @@ const SunIcon = (
 );
 
 // ---- Data ----------------------------------------------------------
+// 4. NEW: Updated href paths for internal routing
 const navLinks = [
-  { id: "home", label: "Home", href: "#hero", icon: HomeIcon },
-  { id: "blog", label: "My Blog Coming Soon...", icon: BlogIcon },
+  { id: "home", label: "Home", href: "/", icon: HomeIcon },
+  { id: "Network & Links", label: "Network & Links", href: "/blog", icon: BlogIcon }, 
 ];
 
 const socialLinks = [
@@ -252,18 +254,6 @@ function Divider() {
 
 /**
  * A single dock icon.
- *
- * PERFORMANCE NOTE — bounding rect is measured once (via useLayoutEffect)
- * whenever `recalcKey` changes, cached in a ref. Every mousemove during
- * the hover session just reads that cached rect — zero layout reads on
- * the hot path.
- *
- * A11Y NOTE — when the OS-level "reduce motion" preference is on, the
- * continuous cursor-tracking lift/rotate is switched off entirely rather
- * than just shortened, since it's the kind of ongoing motion most likely
- * to bother someone with a vestibular disorder. Hover backdrop/tooltip
- * fades are left in place — they're short, discrete, and triggered
- * intentionally by the user's own hover, not ambient motion.
  */
 function DockIcon({ mouseX, item, isExternal = true, recalcKey }) {
   const ref = useRef(null);
@@ -300,73 +290,91 @@ function DockIcon({ mouseX, item, isExternal = true, recalcKey }) {
   });
   const rotate = useSpring(rotateSync, ICON_SPRING);
 
+  // 5. NEW: The inner animated content, separated so we can easily swap between <a> and <Link>
+  const IconContent = (
+    <motion.div
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      className="relative flex items-center justify-center rounded-full p-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--nav-text)]"
+      style={{
+        width: BASE_SIZE,
+        height: BASE_SIZE,
+        y: lift,
+        rotate,
+        willChange: "transform",
+      }}
+    >
+      <AnimatePresence>
+        {hovered && (
+          <motion.span
+            className="pointer-events-none absolute inset-0 rounded-full"
+            style={{
+              backgroundColor: "var(--nav-hover)",
+              willChange: "opacity, transform",
+            }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.6 }}
+            transition={BG_TRANSITION}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {hovered && (
+          <motion.span
+            className="pointer-events-none absolute -top-9 left-1/2 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium shadow-lg semibold"
+            style={{
+              backgroundColor:
+                item.id === "Network & Links" ? "#50A2FF" : "var(--nav-text)",
+              color: item.id === "Network & Links" ? "#fff" : "var(--nav-bg)",
+              fontWeight: item.id === "Network & Links" ? "bold" : "semibold",
+            }}
+            initial={{ opacity: 0, y: 4, x: "-50%", scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
+            exit={{ opacity: 0, y: 4, x: "-50%", scale: 0.9 }}
+            transition={TOOLTIP_TRANSITION}
+          >
+            {item.label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      <motion.span
+        className="relative flex h-full w-full items-center justify-center"
+        style={{ color: "var(--nav-text)" }}
+      >
+        {item.icon}
+      </motion.span>
+    </motion.div>
+  );
+
+  // 6. NEW: Conditionally render React Router <Link> or standard <a>
+  if (isExternal) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={item.label}
+        className="relative flex aspect-square items-center justify-center outline-none"
+      >
+        {IconContent}
+      </a>
+    );
+  }
+
   return (
-    <a
-      href={item.href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noreferrer" : undefined}
+    <Link
+      to={item.href}
       aria-label={item.label}
       className="relative flex aspect-square items-center justify-center outline-none"
     >
-      <motion.div
-        ref={ref}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocus={() => setHovered(true)}
-        onBlur={() => setHovered(false)}
-        className="relative flex items-center justify-center rounded-full p-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--nav-text)]"
-        style={{
-          width: BASE_SIZE,
-          height: BASE_SIZE,
-          y: lift,
-          rotate,
-          willChange: "transform",
-        }}
-      >
-        <AnimatePresence>
-          {hovered && (
-            <motion.span
-              className="pointer-events-none absolute inset-0 rounded-full"
-              style={{
-                backgroundColor: "var(--nav-hover)",
-                willChange: "opacity, transform",
-              }}
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={BG_TRANSITION}
-            />
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {hovered && (
-            <motion.span
-              className="pointer-events-none absolute -top-9 left-1/2 whitespace-nowrap rounded-md px-2 py-1 text-xs font-medium shadow-lg semibold"
-              style={{
-                backgroundColor:
-                  item.id === "blog" ? "#50A2FF" : "var(--nav-text)",
-                color: item.id === "blog" ? "#fff" : "var(--nav-bg)",
-                fontWeight: item.id === "blog" ? "bold" : "semibold",
-              }}
-              initial={{ opacity: 0, y: 4, x: "-50%", scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-              exit={{ opacity: 0, y: 4, x: "-50%", scale: 0.9 }}
-              transition={TOOLTIP_TRANSITION}
-            >
-              {item.label}
-            </motion.span>
-          )}
-        </AnimatePresence>
-
-        <motion.span
-          className="relative flex h-full w-full items-center justify-center"
-          style={{ color: "var(--nav-text)" }}
-        >
-          {item.icon}
-        </motion.span>
-      </motion.div>
-    </a>
+      {IconContent}
+    </Link>
   );
 }
 

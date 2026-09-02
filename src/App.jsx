@@ -1,5 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { useInView } from "react-intersection-observer";
+import { Routes, Route } from "react-router-dom";
 
 import { ArrowUpWideNarrow } from "lucide-react";
 import { motion, MotionConfig } from "framer-motion";
@@ -14,6 +15,9 @@ import { PageReveal, Reveal } from "./components/PageReveal";
 import { ThemeProvider } from "./context/ThemeContext";
 import Blog from "./components/pages/Blog";
 import Cursor from "./components/pages/Cursor";
+import LinksPage from "./components/pages/LInkspage";
+import ScrollToTop from "./components/pages/Scrolltotop";
+
 
 const About = lazy(() => import("./components/pages/About"));
 const Projects = lazy(() => import("./components/pages/Projects"));
@@ -25,6 +29,67 @@ const Education = lazy(() => import("./components/pages/Education"));
 const ContactBubbles = lazy(() => import("./components/pages/ContactBubbles"));
 
 const SectionFallback = () => <div className="min-h-[200px]" aria-hidden="true" />;
+
+// Extracted your original home page content into its own component so it
+// can be a route — nothing inside it changed, just moved.
+function HomePage() {
+  const [ref, inView] = useInView({ threshold: 0.2 });
+
+  return (
+    <>
+      <PageReveal className="flex flex-col space-y-10">
+        <Reveal>
+          <Hero />
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <ContributionCalendar />
+          </Suspense>
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <About />
+          </Suspense>
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <LifeInSquares />
+          </Suspense>
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <WorkExperience />
+          </Suspense>
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <Education />
+          </Suspense>
+        </Reveal>
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <Skills />
+          </Suspense>
+        </Reveal>
+        {/* <Suspense fallback={<SectionFallback />}>
+          <Blog />
+        </Suspense> */}
+        <Reveal>
+          <Suspense fallback={<SectionFallback />}>
+            <Projects />
+          </Suspense>
+        </Reveal>
+      </PageReveal>
+      <Reveal>
+        <div ref={ref}>
+          <Suspense fallback={<SectionFallback />}>
+            <ContactBubbles />
+          </Suspense>
+        </div>
+      </Reveal>
+    </>
+  );
+}
 
 function App() {
   const [visible, setVisible] = useState(false);
@@ -42,8 +107,6 @@ function App() {
     ReactGA.send("pageview");
   }, []);
 
-  const [ref, inView] = useInView({ threshold: 0.2 });
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -60,6 +123,7 @@ function App() {
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion="user">
+        <ScrollToTop/>
         <Toaster
           position="top-center"
           toastOptions={{
@@ -79,56 +143,11 @@ function App() {
           <Navbar />
           <Navbar2 />
 
-          <PageReveal className="flex flex-col space-y-10">
-            <Reveal>
-              <Hero />
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <ContributionCalendar />
-              </Suspense>
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <About />
-              </Suspense>
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <LifeInSquares />
-              </Suspense>
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <WorkExperience />
-              </Suspense>
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <Education />
-              </Suspense>
-            </Reveal>
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <Skills />
-              </Suspense>
-            </Reveal>
-                {/* <Suspense fallback={<SectionFallback />}>
-                  <Blog />
-                </Suspense> */}
-            <Reveal>
-              <Suspense fallback={<SectionFallback />}>
-                <Projects />
-              </Suspense>
-            </Reveal>
-          </PageReveal>
-          <Reveal>
-            <div ref={ref}>
-              <Suspense fallback={<SectionFallback />}>
-                <ContactBubbles />
-              </Suspense>
-            </div>
-          </Reveal>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<LinksPage />} />
+          </Routes>
+
           {/* <Cursor /> */}
         </main>
 
