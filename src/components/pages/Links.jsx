@@ -1,3 +1,4 @@
+
 import { useEffect, memo } from "react";
 import {
   ArrowUpRight,
@@ -12,7 +13,7 @@ import {
 // ============================================================
 
 const SEO = {
-  title: "Mahmoud Fattah — Web Developer, Content Creator & Video Editor",
+  title: "Mahmoud Fattah — Web Developer, Content Creator & Video Editor &  Motion Graphic",
   description:
     "Mahmoud Fattah is a Web Developer, Content Creator and Video Editor. 43+ projects delivered. Explore my portfolio, work, and social links.",
   url: "https://mahmoudfattah.netlify.app/links",
@@ -77,7 +78,7 @@ const personalLinks = [
 ];
 
 // ============================================================
-// SOCIAL ICONS (memoized — pure, prop-driven, no re-render cost)
+// SOCIAL ICONS
 // ============================================================
 
 const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
@@ -91,23 +92,44 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
     focusable: "false",
   };
 
+  // ==========================================================
+  // LINKEDIN
+  // Fixed: brand blue is independent from light/dark mode
+  // ==========================================================
+
   if (type === "linkedin") {
     return (
       <svg {...common}>
-        <rect x="3" y="3" width="18" height="18" rx="4" fill="currentColor" />
+        <rect
+          x="3"
+          y="3"
+          width="18"
+          height="18"
+          rx="4"
+          fill="#0A66C2"
+        />
+
         <path
           d="M7 9.5V16.8"
           stroke="white"
           strokeWidth="1.8"
           strokeLinecap="round"
         />
-        <circle cx="7" cy="7.2" r="1" fill="white" />
+
+        <circle
+          cx="7"
+          cy="7.2"
+          r="1"
+          fill="white"
+        />
+
         <path
           d="M11 16.8V12.8C11 11.7 11.8 10.8 13 10.8C14.2 10.8 15 11.7 15 12.8V16.8"
           stroke="white"
           strokeWidth="1.8"
           strokeLinecap="round"
         />
+
         <path
           d="M11 11V16.8"
           stroke="white"
@@ -118,9 +140,13 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
     );
   }
 
+  // ==========================================================
+  // GITHUB
+  // ==========================================================
+
   if (type === "github") {
     return (
-      <svg {...common} viewBox="0 0 24 24">
+      <svg {...common}>
         <path
           d="M12 2.5C6.75 2.5 2.5 6.8 2.5 12.1C2.5 16.35 5.24 19.96 9.03 21.23C9.5 21.32 9.67 21.03 9.67 20.76C9.67 20.52 9.66 19.72 9.66 18.61C7 19.19 6.4 17.3 6.4 17.3C5.97 16.2 5.34 15.91 5.34 15.91C4.47 15.3 5.4 15.31 5.4 15.31C6.36 15.38 6.86 16.31 6.86 16.31C7.72 17.8 9.12 17.37 9.68 17.12C9.77 16.5 10.02 16.08 10.3 15.84C8.18 15.6 5.95 14.77 5.95 11.1C5.95 10.05 6.32 9.2 6.88 8.53C6.78 8.29 6.45 7.32 6.98 6.02C6.98 6.02 7.78 5.76 9.61 7.03C10.38 6.81 11.2 6.7 12 6.69C12.8 6.7 13.62 6.81 14.39 7.03C16.22 5.76 17.02 6.02 17.02 6.02C17.55 7.32 17.22 8.29 17.12 8.53C17.68 9.2 18.05 10.05 18.05 11.1C18.05 14.78 15.82 15.59 13.69 15.84C14.04 16.14 14.34 16.72 14.34 17.61C14.34 18.89 14.33 19.91 14.33 20.76C14.33 21.03 14.5 21.32 14.97 21.23C18.76 19.96 21.5 16.35 21.5 12.1C21.5 6.8 17.25 2.5 12 2.5Z"
           fill="currentColor"
@@ -128,6 +154,10 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
       </svg>
     );
   }
+
+  // ==========================================================
+  // INSTAGRAM
+  // ==========================================================
 
   if (type === "instagram") {
     return (
@@ -141,11 +171,28 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
           stroke="currentColor"
           strokeWidth="2"
         />
-        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
-        <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" />
+
+        <circle
+          cx="12"
+          cy="12"
+          r="4"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+
+        <circle
+          cx="17.4"
+          cy="6.6"
+          r="1.1"
+          fill="currentColor"
+        />
       </svg>
     );
   }
+
+  // ==========================================================
+  // FACEBOOK
+  // ==========================================================
 
   if (type === "facebook") {
     return (
@@ -158,6 +205,10 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
     );
   }
 
+  // ==========================================================
+  // TIKTOK
+  // ==========================================================
+
   if (type === "tiktok") {
     return (
       <svg {...common}>
@@ -168,6 +219,10 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
       </svg>
     );
   }
+
+  // ==========================================================
+  // UPWORK
+  // ==========================================================
 
   if (type === "upwork") {
     return (
@@ -181,6 +236,10 @@ const SocialIcon = memo(function SocialIcon({ type, size = 24 }) {
       </div>
     );
   }
+
+  // ==========================================================
+  // MOSTAQL
+  // ==========================================================
 
   if (type === "mostaql") {
     return (
@@ -215,12 +274,13 @@ function MiniSticker({ children, className = "" }) {
 }
 
 // ============================================================
-// LINK CARD (memoized — list item, avoids re-render on parent updates)
+// LINK CARD
 // ============================================================
 
 const LinkCard = memo(function LinkCard({ item, index }) {
   const isYellow = item.accent === "yellow";
   const isBlue = item.accent === "blue";
+  const isLinkedIn = item.type === "linkedin";
 
   return (
     <a
@@ -239,21 +299,29 @@ const LinkCard = memo(function LinkCard({ item, index }) {
         isYellow
           ? "bg-[#F5E94E] text-[#111]"
           : isBlue
-          ? "bg-[#0EA5E9] text-white"
-          : "bg-white dark:bg-[#111] text-[#111] dark:text-white",
+            ? "bg-[#0EA5E9] text-white"
+            : "bg-white dark:bg-[#111] text-[#111] dark:text-white",
       ].join(" ")}
       style={{
         animationDelay: `${index * 70}ms`,
       }}
     >
       <div className="flex items-center gap-4">
+        {/* ====================================================
+            SOCIAL ICON CONTAINER
+            LinkedIn gets a fixed white background so the
+            blue LinkedIn logo is visible in both themes.
+        ==================================================== */}
+
         <div
           className={[
             "w-11 h-11 rounded-[14px] border-2 border-black dark:border-[#f8fafc]",
             "flex items-center justify-center shrink-0",
-            isBlue
-              ? "bg-white dark:bg-[#111] text-[#111] dark:text-white"
-              : "bg-black dark:bg-[#f8fafc] text-white dark:text-black",
+            isLinkedIn
+              ? "bg-white text-[#0A66C2]"
+              : isBlue
+                ? "bg-white dark:bg-[#111] text-[#111] dark:text-white"
+                : "bg-black dark:bg-[#f8fafc] text-white dark:text-black",
           ].join(" ")}
         >
           <SocialIcon type={item.type} size={22} />
@@ -286,14 +354,21 @@ const LinkCard = memo(function LinkCard({ item, index }) {
 // ============================================================
 
 export default function Links() {
-  // Scroll to the very top whenever this page is reached (fresh visit or route change)
+  // Scroll to top whenever page is reached
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
     }
   }, []);
 
-  // Lightweight, dependency-free SEO tag injection (title, meta, canonical, JSON-LD)
+  // ==========================================================
+  // SEO
+  // ==========================================================
+
   useEffect(() => {
     if (typeof document === "undefined") return;
 
@@ -302,52 +377,101 @@ export default function Links() {
 
     const setMeta = (attr, key, content) => {
       let tag = document.querySelector(`meta[${attr}="${key}"]`);
+
       if (!tag) {
         tag = document.createElement("meta");
         tag.setAttribute(attr, key);
         document.head.appendChild(tag);
       }
+
       tag.setAttribute("content", content);
       return tag;
     };
 
-    const metaDescription = setMeta("name", "description", SEO.description);
-    const ogTitle = setMeta("property", "og:title", SEO.title);
+    const metaDescription = setMeta(
+      "name",
+      "description",
+      SEO.description
+    );
+
+    const ogTitle = setMeta(
+      "property",
+      "og:title",
+      SEO.title
+    );
+
     const ogDescription = setMeta(
       "property",
       "og:description",
       SEO.description
     );
-    const ogType = setMeta("property", "og:type", "profile");
-    const ogUrl = setMeta("property", "og:url", SEO.url);
-    const ogImage = setMeta("property", "og:image", SEO.image);
-    const twitterCard = setMeta("name", "twitter:card", "summary_large_image");
-    const twitterTitle = setMeta("name", "twitter:title", SEO.title);
+
+    const ogType = setMeta(
+      "property",
+      "og:type",
+      "profile"
+    );
+
+    const ogUrl = setMeta(
+      "property",
+      "og:url",
+      SEO.url
+    );
+
+    const ogImage = setMeta(
+      "property",
+      "og:image",
+      SEO.image
+    );
+
+    const twitterCard = setMeta(
+      "name",
+      "twitter:card",
+      "summary_large_image"
+    );
+
+    const twitterTitle = setMeta(
+      "name",
+      "twitter:title",
+      SEO.title
+    );
+
     const twitterDescription = setMeta(
       "name",
       "twitter:description",
       SEO.description
     );
 
-    let canonical = document.querySelector('link[rel="canonical"]');
+    let canonical = document.querySelector(
+      'link[rel="canonical"]'
+    );
+
     const canonicalCreated = !canonical;
+
     if (!canonical) {
       canonical = document.createElement("link");
       canonical.setAttribute("rel", "canonical");
       document.head.appendChild(canonical);
     }
+
     canonical.setAttribute("href", SEO.url);
 
-    // Preconnect to the most-used external origins to speed up first click
+    // ========================================================
+    // PRECONNECT
+    // ========================================================
+
     const preconnectHosts = [
       "https://www.linkedin.com",
       "https://www.upwork.com",
     ];
+
     const preconnectTags = preconnectHosts.map((href) => {
       let link = document.querySelector(
         `link[rel="preconnect"][href="${href}"]`
       );
+
       const created = !link;
+
       if (!link) {
         link = document.createElement("link");
         link.setAttribute("rel", "preconnect");
@@ -355,17 +479,27 @@ export default function Links() {
         link.setAttribute("crossorigin", "");
         document.head.appendChild(link);
       }
+
       return { link, created };
     });
 
-    // JSON-LD structured data for richer search results
+    // ========================================================
+    // JSON-LD
+    // ========================================================
+
     const jsonLd = document.createElement("script");
+
     jsonLd.type = "application/ld+json";
+
     jsonLd.text = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Mahmoud Fattah",
-      jobTitle: ["Web Developer", "Content Creator", "Video Editor"],
+      jobTitle: [
+        "Web Developer",
+        "Content Creator",
+        "Video Editor",
+      ],
       url: SEO.url,
       image: SEO.image,
       sameAs: [
@@ -376,23 +510,42 @@ export default function Links() {
         "https://www.instagram.com/mo__fattah",
       ],
     });
+
     document.head.appendChild(jsonLd);
 
     return () => {
       document.title = previousTitle;
-      document.head.removeChild(jsonLd);
-      if (canonicalCreated && canonical.parentNode) {
+
+      if (jsonLd.parentNode) {
+        jsonLd.parentNode.removeChild(jsonLd);
+      }
+
+      if (
+        canonicalCreated &&
+        canonical.parentNode
+      ) {
         canonical.parentNode.removeChild(canonical);
       }
+
       preconnectTags.forEach(({ link, created }) => {
-        if (created && link.parentNode) link.parentNode.removeChild(link);
+        if (created && link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
       });
     };
   }, []);
 
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
     <main className="animate-page-enter min-h-screen w-full overflow-hidden text-[#111] dark:text-[#f8fafc] transition-colors duration-300">
-      {/* Page Animation Styles */}
+
+      {/* ======================================================
+          PAGE ANIMATION
+      ====================================================== */}
+
       <style>
         {`
           @keyframes slideDownFade {
@@ -400,61 +553,102 @@ export default function Links() {
               opacity: 0;
               transform: translateY(-40px);
             }
+
             to {
               opacity: 1;
               transform: translateY(0);
             }
           }
+
           .animate-page-enter {
-            animation: slideDownFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideDownFade 0.5s
+              cubic-bezier(0.16, 1, 0.3, 1)
+              forwards;
           }
         `}
       </style>
 
-      {/* GLOBAL WRAPPER */}
+      {/* ======================================================
+          GLOBAL WRAPPER
+      ====================================================== */}
+
       <div className="relative mx-auto w-full px-4 sm:px-5">
+
         {/* ====================================================
             HERO
         ==================================================== */}
+
         <header className="relative">
+
           {/* Back Button */}
+
           <div className="mb-5 pt-2">
             <button
               type="button"
               onClick={() => window.history.back()}
               className="
-                inline-flex items-center justify-center w-10 h-10 
-                rounded-full border-2 border-black dark:border-[#f8fafc] 
-                bg-white dark:bg-[#111] text-black dark:text-white 
-                shadow-[3px_3px_0_#111] dark:shadow-[3px_3px_0_#f8fafc] 
-                transition-transform duration-300 hover:-translate-y-1 active:translate-y-0
+                inline-flex
+                items-center
+                justify-center
+                w-10
+                h-10
+                rounded-full
+                border-2
+                border-black
+                dark:border-[#f8fafc]
+                bg-white
+                dark:bg-[#111]
+                text-black
+                dark:text-white
+                shadow-[3px_3px_0_#111]
+                dark:shadow-[3px_3px_0_#f8fafc]
+                transition-transform
+                duration-300
+                hover:-translate-y-1
+                active:translate-y-0
               "
               aria-label="Go back"
             >
-              <ArrowLeft size={20} strokeWidth={2.5} aria-hidden="true" />
+              <ArrowLeft
+                size={20}
+                strokeWidth={2.5}
+                aria-hidden="true"
+              />
             </button>
           </div>
 
           {/* Small top label */}
+
           <div className="flex items-center justify-between px-1 mb-5">
+
             <div className="inline-flex items-center gap-2 rounded-full border-2 border-black dark:border-[#f8fafc] bg-white dark:bg-[#111] px-3 py-1.5 shadow-[3px_3px_0_#111] dark:shadow-[3px_3px_0_#f8fafc]">
+
               <span
                 aria-hidden="true"
                 className="w-2.5 h-2.5 rounded-full bg-[#F5E94E] border border-black dark:border-[#f8fafc]"
               />
+
               <span className="text-[11px] sm:text-xs font-black uppercase tracking-[0.16em] text-black dark:text-white">
                 Creative Digital Profile
               </span>
+
             </div>
 
-            <div className="text-[11px] font-black tracking-widest" aria-hidden="true">
+            <div
+              className="text-[11px] font-black tracking-widest"
+              aria-hidden="true"
+            >
               MF / 01
             </div>
+
           </div>
 
           {/* Hero visual */}
+
           <div className="relative min-h-[510px] sm:min-h-[560px]">
+
             {/* Yellow graphic block */}
+
             <div
               aria-hidden="true"
               className="
@@ -473,6 +667,7 @@ export default function Links() {
             />
 
             {/* Blue block */}
+
             <div
               aria-hidden="true"
               className="
@@ -491,6 +686,7 @@ export default function Links() {
             />
 
             {/* Decorative dots */}
+
             <MiniSticker className="left-[2%] top-[7%]">
               <div className="grid grid-cols-3 gap-2">
                 {[...Array(9)].map((_, i) => (
@@ -503,6 +699,7 @@ export default function Links() {
             </MiniSticker>
 
             {/* Star */}
+
             <MiniSticker className="right-[2%] top-[6%] rotate-[12deg]">
               <Star
                 size={42}
@@ -511,17 +708,22 @@ export default function Links() {
               />
             </MiniSticker>
 
-            {/* Question / creative bubble */}
+            {/* Question bubble */}
+
             <MiniSticker className="right-[0%] top-[49%] rotate-[7deg]">
               <div className="flex items-center justify-center w-[74px] h-[74px] rounded-full bg-white dark:bg-[#111] border-[3px] border-black dark:border-[#f8fafc] shadow-[4px_4px_0_#111] dark:shadow-[4px_4px_0_#f8fafc]">
+
                 <span className="text-4xl font-black text-black dark:text-white">
                   ?
                 </span>
+
               </div>
             </MiniSticker>
 
-            {/* Portrait — LCP element: eager + high priority, async decode */}
+            {/* Portrait */}
+
             <div className="absolute left-1/2 -translate-x-1/2 top-[2%] w-[88%] sm:w-[86%] z-10">
+
               <img
                 src="/mahmoud-sketch.webp"
                 alt="Illustrated portrait sketch of Mahmoud Fattah, web developer and content creator"
@@ -538,32 +740,44 @@ export default function Links() {
                   select-none
                 "
               />
+
             </div>
 
             {/* Small sticker */}
+
             <div
               aria-hidden="true"
               className="absolute z-30 left-[3%] bottom-[9%] rotate-[-7deg]"
             >
+
               <div className="rounded-[16px] bg-[#0EA5E9] text-white border-[3px] border-black dark:border-[#f8fafc] px-4 py-3 shadow-[4px_4px_0_#111] dark:shadow-[4px_4px_0_#f8fafc]">
+
                 <div className="text-[10px] font-bold uppercase tracking-[0.17em]">
                   Creative
                 </div>
+
                 <div className="text-[15px] font-black leading-none mt-1">
                   + Digital
                 </div>
+
               </div>
+
             </div>
+
           </div>
 
-          {/* Main typography — single h1 for correct SEO heading hierarchy */}
+          {/* Main typography */}
+
           <div className="relative z-30 -mt-4">
+
             <h1 className="leading-[0.8]">
+
               <span className="block font-black text-[58px] sm:text-[68px] tracking-[-0.075em] uppercase">
                 Mahmoud
               </span>
 
               <span className="flex items-end gap-3">
+
                 <span className="font-black text-[58px] sm:text-[68px] tracking-[-0.075em] uppercase">
                   Fattah
                 </span>
@@ -574,10 +788,13 @@ export default function Links() {
                 >
                   MF
                 </span>
+
               </span>
+
             </h1>
 
             <p className="mt-6 mb-2 flex flex-wrap gap-2">
+
               <span className="rounded-full border-2 border-black dark:border-[#f8fafc] bg-white dark:bg-[#111] px-3 py-2 text-[11px] sm:text-xs font-black uppercase text-black dark:text-white">
                 Web Developer
               </span>
@@ -593,16 +810,26 @@ export default function Links() {
               <span className="rounded-full border-2 border-black dark:border-[#f8fafc] bg-white dark:bg-[#111] px-3 py-2 text-[11px] sm:text-xs font-black uppercase text-black dark:text-white">
                 Motion Graphic
               </span>
+
             </p>
+
           </div>
+
         </header>
 
         {/* ====================================================
             STATS
         ==================================================== */}
-        <section aria-label="Career stats" className="relative pb-8">
+
+        <section
+          aria-label="Career stats"
+          className="relative pb-8"
+        >
+
           <div className="grid grid-cols-2 gap-3">
+
             <div className="rounded-[26px] bg-[#111] dark:bg-white text-white dark:text-[#111] border-[3px] border-black dark:border-[#f8fafc] px-5 py-5 shadow-[5px_5px_0_#F5E94E]">
+
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/60 dark:text-black/60">
                 Projects
               </p>
@@ -614,9 +841,11 @@ export default function Links() {
               <p className="mt-2 text-xs font-bold text-white/70 dark:text-black/70">
                 Successfully built
               </p>
+
             </div>
 
             <div className="rounded-[26px] bg-[#0EA5E9] text-white border-[3px] border-black dark:border-[#f8fafc] px-5 py-5 shadow-[5px_5px_0_#111] dark:shadow-[5px_5px_0_#f8fafc]">
+
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-white/80">
                 LinkedIn
               </p>
@@ -628,14 +857,22 @@ export default function Links() {
               <p className="mt-2 text-xs font-bold text-white/85">
                 Professional network
               </p>
+
             </div>
+
           </div>
+
         </section>
 
         {/* ====================================================
             CV CTA
         ==================================================== */}
-        <section aria-label="Download CV" className="pb-10">
+
+        <section
+          aria-label="Download CV"
+          className="pb-10"
+        >
+
           <a
             href="/mahmoud_fattah_cv.pdf"
             download
@@ -666,12 +903,21 @@ export default function Links() {
               text-black
             "
           >
+
             <div className="flex items-center gap-4">
+
               <div className="w-12 h-12 rounded-[16px] bg-white dark:bg-[#111] border-2 border-black dark:border-[#f8fafc] flex items-center justify-center text-black dark:text-white">
-                <Download size={23} strokeWidth={2.5} aria-hidden="true" />
+
+                <Download
+                  size={23}
+                  strokeWidth={2.5}
+                  aria-hidden="true"
+                />
+
               </div>
 
               <div>
+
                 <div className="text-[11px] uppercase tracking-[0.16em] font-black">
                   Available for work
                 </div>
@@ -679,7 +925,9 @@ export default function Links() {
                 <div className="text-[21px] font-black tracking-[-0.04em]">
                   Download My CV
                 </div>
+
               </div>
+
             </div>
 
             <div
@@ -688,15 +936,24 @@ export default function Links() {
             >
               <ArrowUpRight size={21} />
             </div>
+
           </a>
+
         </section>
 
         {/* ====================================================
             WORK WITH ME
         ==================================================== */}
-        <nav aria-label="Professional links" className="pb-10">
+
+        <nav
+          aria-label="Professional links"
+          className="pb-10"
+        >
+
           <div className="flex items-end justify-between mb-4 px-1">
+
             <div>
+
               <p className="text-[10px] uppercase tracking-[0.2em] font-black text-black/45 dark:text-[#f8fafc]/45">
                 Professional
               </p>
@@ -704,27 +961,44 @@ export default function Links() {
               <h2 className="text-[31px] font-black tracking-[-0.065em] leading-none">
                 Work With Me
               </h2>
+
             </div>
 
-            <span className="text-[10px] font-black uppercase tracking-[0.14em]" aria-hidden="true">
+            <span
+              className="text-[10px] font-black uppercase tracking-[0.14em]"
+              aria-hidden="true"
+            >
               04 Links
             </span>
+
           </div>
 
           <ul className="space-y-4 list-none m-0 p-0">
+
             {professionalLinks.map((item, index) => (
               <li key={item.name}>
-                <LinkCard item={item} index={index} />
+                <LinkCard
+                  item={item}
+                  index={index}
+                />
               </li>
             ))}
+
           </ul>
+
         </nav>
 
         {/* ====================================================
             PORTFOLIO FEATURE
         ==================================================== */}
-        <section aria-label="Portfolio" className="pb-10">
+
+        <section
+          aria-label="Portfolio"
+          className="pb-10"
+        >
+
           <div className="relative overflow-hidden rounded-[31px] border-[3px] border-black dark:border-[#f8fafc] bg-[#111] dark:bg-white text-white dark:text-[#111] px-6 py-7 shadow-[7px_7px_0_#0EA5E9]">
+
             <div
               aria-hidden="true"
               className="absolute right-[-25px] top-[-25px] w-[120px] h-[120px] rounded-full bg-[#F5E94E] border-[3px] border-black dark:border-[#f8fafc]"
@@ -736,11 +1010,13 @@ export default function Links() {
             />
 
             <div className="relative z-10">
+
               <div className="inline-flex items-center rounded-full bg-[#F5E94E] text-black px-3 py-1.5 border-2 border-black dark:border-[#f8fafc] text-[10px] font-black uppercase tracking-[0.15em]">
                 Portfolio
               </div>
 
               <div className="mt-7">
+
                 <p className="text-[11px] text-white/55 dark:text-black/55 font-black uppercase tracking-[0.18em]">
                   More than
                 </p>
@@ -752,6 +1028,7 @@ export default function Links() {
                 <h2 className="mt-3 text-[25px] font-black tracking-[-0.05em]">
                   Projects created.
                 </h2>
+
               </div>
 
               <p className="mt-5 max-w-[310px] text-sm leading-6 text-white/65 dark:text-black/65">
@@ -787,24 +1064,46 @@ export default function Links() {
                 "
               >
                 View My Portfolio
-                <ExternalLink size={17} aria-hidden="true" />
+                <ExternalLink
+                  size={17}
+                  aria-hidden="true"
+                />
               </a>
+
             </div>
+
           </div>
+
         </section>
 
         {/* ====================================================
             DEVFLOW
         ==================================================== */}
-        <nav aria-label="DevFlow social links" className="pb-10">
+
+        <nav
+          aria-label="DevFlow social links"
+          className="pb-10"
+        >
+
           <div className="relative overflow-hidden rounded-[31px] bg-[#F5E94E] border-[3px] border-black dark:border-[#f8fafc] px-5 py-6 shadow-[6px_6px_0_#111] dark:shadow-[6px_6px_0_#f8fafc] text-black">
-            <div aria-hidden="true" className="absolute right-4 top-4 rotate-[8deg]">
+
+            <div
+              aria-hidden="true"
+              className="absolute right-4 top-4 rotate-[8deg]"
+            >
+
               <div className="w-11 h-11 rounded-full bg-[#0EA5E9] border-2 border-black dark:border-[#f8fafc] flex items-center justify-center">
-                <span className="text-white text-lg font-black">@</span>
+
+                <span className="text-white text-lg font-black">
+                  @
+                </span>
+
               </div>
+
             </div>
 
             <div className="relative">
+
               <p className="text-[10px] uppercase tracking-[0.18em] font-black">
                 Creative Team
               </p>
@@ -819,8 +1118,10 @@ export default function Links() {
               </p>
 
               <ul className="mt-6 space-y-3 list-none m-0 p-0">
+
                 {devFlowLinks.map((item, index) => (
                   <li key={item.name}>
+
                     <LinkCard
                       item={{
                         ...item,
@@ -828,23 +1129,34 @@ export default function Links() {
                           index === 1
                             ? "blue"
                             : index === 2
-                            ? "white"
-                            : "white",
+                              ? "white"
+                              : "white",
                       }}
                       index={index}
                     />
+
                   </li>
                 ))}
+
               </ul>
+
             </div>
+
           </div>
+
         </nav>
 
         {/* ====================================================
             PERSONAL
         ==================================================== */}
-        <nav aria-label="Personal links" className="pb-10">
+
+        <nav
+          aria-label="Personal links"
+          className="pb-10"
+        >
+
           <div className="mb-4 px-1">
+
             <p className="text-[10px] uppercase tracking-[0.2em] font-black text-black/45 dark:text-[#f8fafc]/45">
               Personal
             </p>
@@ -852,11 +1164,14 @@ export default function Links() {
             <h2 className="text-[31px] font-black tracking-[-0.065em] leading-none">
               Stay Connected
             </h2>
+
           </div>
 
           <ul className="space-y-4 list-none m-0 p-0">
+
             {personalLinks.map((item, index) => (
               <li key={item.name}>
+
                 <LinkCard
                   item={{
                     ...item,
@@ -864,16 +1179,25 @@ export default function Links() {
                   }}
                   index={index}
                 />
+
               </li>
             ))}
+
           </ul>
+
         </nav>
 
         {/* ====================================================
             FINAL CTA
         ==================================================== */}
-        <section aria-label="Contact" className="pb-12">
+
+        <section
+          aria-label="Contact"
+          className="pb-12"
+        >
+
           <div className="relative rounded-[30px] border-[3px] border-black dark:border-[#f8fafc] bg-[#0EA5E9] text-white px-6 py-7 shadow-[6px_6px_0_#111] dark:shadow-[6px_6px_0_#f8fafc] overflow-hidden">
+
             <div
               aria-hidden="true"
               className="absolute right-[-15px] bottom-[-25px] text-[130px] font-black text-white/10 leading-none"
@@ -882,6 +1206,7 @@ export default function Links() {
             </div>
 
             <div className="relative z-10">
+
               <p className="text-[11px] uppercase tracking-[0.18em] font-black text-white/70">
                 Let's build something
               </p>
@@ -921,27 +1246,42 @@ export default function Links() {
                 "
               >
                 Let's Talk
-                <ArrowUpRight size={18} aria-hidden="true" />
+
+                <ArrowUpRight
+                  size={18}
+                  aria-hidden="true"
+                />
               </a>
+
             </div>
+
           </div>
+
         </section>
 
         {/* ====================================================
             FOOTER
         ==================================================== */}
+
         <footer className="pb-8">
+
           <div className="flex flex-col items-center text-center">
+
             <p className="text-[23px] font-black tracking-[-0.05em]">
               Mahmoud Fattah
             </p>
 
             <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.12em] text-black/45 dark:text-[#f8fafc]/45">
-              Web Developer • Content Creator • Video Editor
+              Web Developer • Content Creator • Video Editor •  Motion Graphic
             </p>
+
           </div>
+
         </footer>
+
       </div>
+
     </main>
   );
 }
+
