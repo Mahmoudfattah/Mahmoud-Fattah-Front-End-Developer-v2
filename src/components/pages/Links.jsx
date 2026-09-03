@@ -523,7 +523,7 @@ export default function Links() {
             {/* Portrait — LCP element: eager + high priority, async decode */}
             <div className="absolute left-1/2 -translate-x-1/2 top-[2%] w-[88%] sm:w-[86%] z-10">
               <img
-                src="/src/assets/images/mahmoud-sketch.webp"
+                src="/mahmoud-sketch.webp"
                 alt="Illustrated portrait sketch of Mahmoud Fattah, web developer and content creator"
                 loading="eager"
                 fetchPriority="high"
