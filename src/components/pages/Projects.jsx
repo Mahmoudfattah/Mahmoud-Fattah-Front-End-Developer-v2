@@ -251,13 +251,13 @@ export default function Projects() {
    const sectionRef = useRef(null);
   const isFirstRender = useRef(true);
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [page]);
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //     return;
+  //   }
+  //   sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // }, [page]);
  
   const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
   const visible = projects.slice((page - 1) * PROJECTS_PER_PAGE, page * PROJECTS_PER_PAGE);

@@ -16,7 +16,7 @@ const SEO = {
   description:
     "Mahmoud Fattah is a Web Developer, Content Creator and Video Editor. 43+ projects delivered. Explore my portfolio, work, and social links.",
   url: "https://mahmoudfattah.netlify.app/links",
-  image: "/src/assets/images/mahmoud-sketch.webp",
+  image: "/mahmoud-sketch.webp",
 };
 
 // ============================================================
@@ -577,7 +577,7 @@ export default function Links() {
               </span>
             </h1>
 
-            <p className="mt-6 flex flex-wrap gap-2">
+            <p className="mt-6 mb-2 flex flex-wrap gap-2">
               <span className="rounded-full border-2 border-black dark:border-[#f8fafc] bg-white dark:bg-[#111] px-3 py-2 text-[11px] sm:text-xs font-black uppercase text-black dark:text-white">
                 Web Developer
               </span>
@@ -637,7 +637,7 @@ export default function Links() {
         ==================================================== */}
         <section aria-label="Download CV" className="pb-10">
           <a
-            href="/Mahmoud-Fattah-CV.pdf"
+            href="/mahmoud_fattah_cv.pdf"
             download
             aria-label="Download Mahmoud Fattah's CV as PDF"
             className="
@@ -684,7 +684,7 @@ export default function Links() {
 
             <div
               aria-hidden="true"
-              className="w-11 h-11 rounded-full bg-black dark:bg-[#f8fafc] text-white dark:text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-[-45deg]"
+              className="w-11 h-11 rounded-full bg-black dark:bg-[#f8fafc] text-white dark:text-black flex items-center justify-center transition-transform duration-300 group-hover:rotate-[130deg]"
             >
               <ArrowUpRight size={21} />
             </div>
