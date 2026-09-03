@@ -285,7 +285,7 @@ const LinkCard = memo(function LinkCard({ item, index }) {
 // MAIN PAGE
 // ============================================================
 
-export default function LinksPage() {
+export default function Links() {
   // Scroll to the very top whenever this page is reached (fresh visit or route change)
   useEffect(() => {
     if (typeof window !== "undefined") {

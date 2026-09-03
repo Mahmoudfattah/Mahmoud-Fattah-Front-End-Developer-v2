@@ -15,8 +15,10 @@ import { PageReveal, Reveal } from "./components/PageReveal";
 import { ThemeProvider } from "./context/ThemeContext";
 import Blog from "./components/pages/Blog";
 import Cursor from "./components/pages/Cursor";
-import LinksPage from "./components/pages/LInkspage";
+
 import ScrollToTop from "./components/pages/Scrolltotop";
+import Links from "./components/pages/Links";
+
 
 
 const About = lazy(() => import("./components/pages/About"));
@@ -145,7 +147,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/blog" element={<LinksPage />} />
+            <Route path="/blog" element={<Links />} />
           </Routes>
 
           {/* <Cursor /> */}
