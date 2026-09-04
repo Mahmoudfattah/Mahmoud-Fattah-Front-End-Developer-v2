@@ -120,7 +120,7 @@ export default function About() {
                             
                          });
                          }}
-                         href='/my-cv.pdf'
+                         href='/mahmoud_fattah_cv.pdf'
                          download='Mahmoud Fattah CV'
                          aria-label="download CV"
                          className="
