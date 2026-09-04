@@ -1,5 +1,6 @@
 
 import { useEffect, memo } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   ArrowUpRight,
   Download,
@@ -354,6 +355,9 @@ const LinkCard = memo(function LinkCard({ item, index }) {
 // ============================================================
 
 export default function Links() {
+
+  const navigate = useNavigate();
+
   // Scroll to top whenever page is reached
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -583,38 +587,38 @@ export default function Links() {
           {/* Back Button */}
 
           <div className="mb-5 pt-2">
-            <button
-              type="button"
-              onClick={() => window.history.back()}
-              className="
-                inline-flex
-                items-center
-                justify-center
-                w-10
-                h-10
-                rounded-full
-                border-2
-                border-black
-                dark:border-[#f8fafc]
-                bg-white
-                dark:bg-[#111]
-                text-black
-                dark:text-white
-                shadow-[3px_3px_0_#111]
-                dark:shadow-[3px_3px_0_#f8fafc]
-                transition-transform
-                duration-300
-                hover:-translate-y-1
-                active:translate-y-0
-              "
-              aria-label="Go back"
-            >
-              <ArrowLeft
-                size={20}
-                strokeWidth={2.5}
-                aria-hidden="true"
-              />
-            </button>
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="
+              inline-flex
+              items-center
+              justify-center
+              w-10
+              h-10
+              rounded-full
+              border-2
+              border-black
+              dark:border-[#f8fafc]
+              bg-white
+              dark:bg-[#111]
+              text-black
+              dark:text-white
+              shadow-[3px_3px_0_#111]
+              dark:shadow-[3px_3px_0_#f8fafc]
+              transition-transform
+              duration-300
+              hover:-translate-y-1
+              active:translate-y-0
+            "
+            aria-label="Go home"
+          >
+  <ArrowLeft
+    size={20}
+    strokeWidth={2.5}
+    aria-hidden="true"
+  />
+</button>
           </div>
 
           {/* Small top label */}
