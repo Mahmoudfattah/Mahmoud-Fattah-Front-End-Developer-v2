@@ -86,7 +86,7 @@ const SunIcon = (
  
 const navLinks = [ 
   { id: "home", label: "Home", href: "/", icon: HomeIcon }, 
-  { id: "links", label: "Links", href: "/blog", icon: BlogIcon }, 
+  { id: "links", label: "Links", href: "/links", icon: BlogIcon }, 
 ]; 
  
 const socialLinks = [ 

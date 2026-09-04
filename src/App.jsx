@@ -147,7 +147,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/blog" element={<Links />} />
+            <Route path="/links" element={<Links />} />
           </Routes>
 
           {/* <Cursor /> */}

@@ -206,7 +206,7 @@ const SunIcon = (
 // 4. NEW: Updated href paths for internal routing
 const navLinks = [
   { id: "home", label: "Home", href: "/", icon: HomeIcon },
-  { id: "Network & Links", label: "Network & Links", href: "/blog", icon: BlogIcon }, 
+  { id: "Network & Links", label: "Network & Links", href: "/links", icon: BlogIcon }, 
 ];
 
 const socialLinks = [
