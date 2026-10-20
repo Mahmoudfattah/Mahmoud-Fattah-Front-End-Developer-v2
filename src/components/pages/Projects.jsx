@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { fetchProjects } from "../../../lib/projectsApi";
 
 // Section 7/8 — Projects
 // Matches the reference's grid card layout exactly: image, title + status badge,
@@ -9,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 
 const PROJECTS_PER_PAGE = 4;
 
-const projects = [
+const FALLBACK_PROJECTS = [
   {
     id: "erp",
     title: "ERP System",
@@ -245,11 +246,94 @@ function ProjectCard({ project }) {
   );
 }
 
+function ProjectSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex flex-col overflow-hidden rounded-xl border animate-pulse"
+      style={{ backgroundColor: "var(--color-bg-projects)", borderColor: "var(--border-color)" }}
+    >
+      <div className="h-40 w-full" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+      <div className="flex flex-col gap-1 p-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="h-5 w-2/5 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+          <div className="h-5 w-16 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+        </div>
+        <div className="h-4 w-1/2 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+        <div className="h-16 w-full rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+        <div className="mt-2 flex gap-1">
+          <div className="h-4 w-14 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+          <div className="h-4 w-16 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+          <div className="h-4 w-12 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+        </div>
+      </div>
+      <div className="mt-auto flex gap-2 px-3 pb-3">
+        <div className="h-6 w-20 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+        <div className="h-6 w-16 rounded-md" style={{ backgroundColor: "var(--color-bgtech-projects)" }} />
+      </div>
+    </div>
+  );
+}
+
 export default function Projects() {
   const [page, setPage] = useState(1);
+  const [projects, setProjects] = useState(FALLBACK_PROJECTS);
+  const [isLoading, setIsLoading] = useState(true);
 
    const sectionRef = useRef(null);
   const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProjects() {
+      try {
+        const rows = await fetchProjects();
+        if (!isMounted) return;
+
+        if (rows.length === 0) {
+          console.error("Supabase returned no visible projects; using fallback projects.");
+          setProjects(FALLBACK_PROJECTS);
+          return;
+        }
+
+        setProjects(
+          rows.map((project) => ({
+            id: project.id,
+            title: project.title,
+            role: project.role,
+            status: project.status,
+            description: project.description,
+            tech: project.tech_stack,
+            live: project.live_url,
+            github: project.repo_url,
+            image: project.image_url,
+            style: {
+              objectPosition: project.image_position,
+              transform: `scale(${project.image_scale})`,
+            },
+          }))
+        );
+      } catch (error) {
+        if (!isMounted) return;
+        console.error("Failed to fetch projects from Supabase; using fallback projects.", error);
+        setProjects(FALLBACK_PROJECTS);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }
+
+    loadProjects();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
+
+  useEffect(() => {
+    setPage((currentPage) => (currentPage > totalPages ? 1 : currentPage));
+  }, [totalPages]);
 
   // useEffect(() => {
   //   if (isFirstRender.current) {
@@ -259,7 +343,6 @@ export default function Projects() {
   //   sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   // }, [page]);
  
-  const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
   const visible = projects.slice((page - 1) * PROJECTS_PER_PAGE, page * PROJECTS_PER_PAGE);
 
   return (
@@ -290,9 +373,11 @@ export default function Projects() {
       </p>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {visible.map((project) => (
+        {isLoading
+          ? Array.from({ length: PROJECTS_PER_PAGE }, (_, index) => <ProjectSkeleton key={index} />)
+          : visible.map((project) => (
           <ProjectCard key={project.id} project={project} />
-        ))}
+          ))}
       </div>
 
       {totalPages > 1 && (
