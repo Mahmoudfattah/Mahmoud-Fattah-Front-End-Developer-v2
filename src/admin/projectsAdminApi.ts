@@ -6,10 +6,28 @@ export type ProjectChanges = Partial<ProjectInput>;
 export type NewProjectInput = Pick<ProjectInput, "title" | "role">
   & Partial<Omit<ProjectInput, "title" | "role" | "slug" | "sort_order">>;
 
+const STORAGE_IMAGE_MARKER = "/storage/v1/object/public/project-images/";
+
 function throwIfNoRow<T>(data: T | null, error: { message: string } | null): T {
   if (error) throw error;
   if (!data) throw new Error("Not allowed or not found");
   return data;
+}
+
+export async function deleteStoredProjectImage(imageUrl: string | null | undefined): Promise<void> {
+  if (!imageUrl?.includes(STORAGE_IMAGE_MARKER)) return;
+
+  const pathStart = imageUrl.indexOf(STORAGE_IMAGE_MARKER) + STORAGE_IMAGE_MARKER.length;
+  const encodedPath = imageUrl.slice(pathStart).split(/[?#]/, 1)[0];
+  if (!encodedPath) return;
+
+  const path = decodeURIComponent(encodedPath);
+  const { error } = await getSupabaseClient()
+    .storage
+    .from("project-images")
+    .remove([path]);
+
+  if (error) throw error;
 }
 
 export async function listAllProjects(): Promise<Project[]> {

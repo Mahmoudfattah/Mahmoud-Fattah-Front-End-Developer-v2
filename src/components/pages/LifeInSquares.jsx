@@ -4,14 +4,27 @@
 // lg:hover:scale-105 only (avoids sticky hover on touch)
 
 const photos = [
-  { id: 1, span: "col-span-2 md:row-span-2", src: '/Lifeinsequares/25.webp', style: { objectPosition: '0px -70px' } },
-  { id: 2, span: "md:col-span-1", src: '/Lifeinsequares/17.webp' },
-  { id: 3, span: "md:col-span-1", src: '/Lifeinsequares/7.webp' },
-  { id: 4, span: "md:col-span-1 row-span-2", src: '/Lifeinsequares/2.webp' },
-  { id: 5, span: "md:col-span-1 row-span-1 md:row-span-2", src: '/Lifeinsequares/3.webp' },
-  { id: 6, span: "md:col-span-1 row-span-2", src: '/Lifeinsequares/4.webp' },
-  { id: 7, span: "md:col-span-1 md:row-span-2", src: '/Lifeinsequares/10.webp' },
-  { id: 8, span: "col-span-2", src: '/Lifeinsequares/6.webp' },
+  {
+    id: 1,
+    span: "col-span-2 md:row-span-2",
+    src: "/Lifeinsequares/Curly-Haired Man in Black Hoodie.webp",
+    style: { objectPosition: "0px -20px" , scale: '1' },
+  },
+  { id: 2, span: "md:col-span-1", src: "/Lifeinsequares/17.webp" },
+  { id: 3, span: "md:col-span-1", src: "/Lifeinsequares/7.webp" },
+  { id: 4, span: "md:col-span-1 row-span-2", src: "/Lifeinsequares/2.webp" },
+  {
+    id: 5,
+    span: "md:col-span-1 row-span-1 md:row-span-2",
+    src: "/Lifeinsequares/3.webp",
+  },
+  { id: 6, span: "md:col-span-1 row-span-2", src: "/Lifeinsequares/4.webp" },
+  {
+    id: 7,
+    span: "md:col-span-1 md:row-span-2",
+    src: "/Lifeinsequares/10.webp",
+  },
+  { id: 8, span: "col-span-2", src: "/Lifeinsequares/6.webp" },
 ];
 
 function PhotoTile({ photo }) {

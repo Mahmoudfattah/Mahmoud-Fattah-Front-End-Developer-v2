@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Image, Plus, X } from "lucide-react";
+import ImageUploader from "./ImageUploader";
 
 const emptyProject = {
   title: "",
@@ -250,14 +251,23 @@ export default function ProjectFormDrawer({ project, onClose, onSave }) {
               {[
                 ["live_url", "Live URL"],
                 ["repo_url", "Repository URL"],
-                ["image_url", "Image URL"],
               ].map(([key, label]) => (
-                <div key={key} className={key === "image_url" ? "sm:col-span-2" : ""}>
+                <div key={key}>
                   <label className={labelClass} htmlFor={`project-${key}`}>{label}</label>
                   <input id={`project-${key}`} type="text" value={form[key]} onChange={(event) => updateField(key, event.target.value)} className={inputClass} style={{ backgroundColor: "var(--color-bg-projects)", borderColor: errors[key] ? "var(--color-third)" : "var(--border-color)", color: "var(--color-text)" }} />
                   {errors[key] && <p className="mt-1 text-xs" style={{ color: "var(--color-third)" }}>{errors[key]}</p>}
                 </div>
               ))}
+              <div className="sm:col-span-2">
+                <label className={labelClass}>Image</label>
+                <ImageUploader
+                  imageUrl={form.image_url}
+                  imagePosition={form.image_position}
+                  imageScale={form.image_scale}
+                  title={form.title}
+                  onChange={(image_url) => updateField("image_url", image_url)}
+                />
+              </div>
               <div>
                 <label className={labelClass} htmlFor="project-image-position">Image position</label>
                 <input id="project-image-position" type="text" value={form.image_position} onChange={(event) => updateField("image_position", event.target.value)} className={inputClass} style={{ backgroundColor: "var(--color-bg-projects)", borderColor: "var(--border-color)", color: "var(--color-text)" }} />

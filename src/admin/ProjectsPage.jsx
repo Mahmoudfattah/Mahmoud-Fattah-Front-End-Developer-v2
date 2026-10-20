@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import {
   createProject,
+  deleteStoredProjectImage,
   deleteProject,
   listAllProjects,
   updateProject,
@@ -190,6 +191,16 @@ export default function ProjectsPage() {
       if (drawerProject) {
         const updated = await updateProject(drawerProject.id, data);
         setProjects((current) => current.map((item) => item.id === updated.id ? updated : item));
+        if (drawerProject.image_url && drawerProject.image_url !== updated.image_url) {
+          try {
+            await deleteStoredProjectImage(drawerProject.image_url);
+          } catch (cleanupError) {
+            console.error("Project updated, but its previous storage image could not be removed.", cleanupError);
+            showToast("error", "Project updated, but the previous image could not be removed.");
+            setDrawerOpen(false);
+            return;
+          }
+        }
         showToast("success", "Project updated.");
       } else {
         const created = await createProject(data);
@@ -252,9 +263,15 @@ export default function ProjectsPage() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await deleteProject(deleteTarget.id);
+      const deleted = await deleteProject(deleteTarget.id);
       setProjects((current) => current.filter((project) => project.id !== deleteTarget.id));
-      showToast("success", `${deleteTarget.title} deleted.`);
+      try {
+        await deleteStoredProjectImage(deleted.image_url);
+        showToast("success", `${deleteTarget.title} deleted.`);
+      } catch (cleanupError) {
+        console.error("Project deleted, but its storage image could not be removed.", cleanupError);
+        showToast("error", `${deleteTarget.title} was deleted, but its image could not be removed.`);
+      }
       setDeleteTarget(null);
     } catch (error) {
       console.error("Failed to delete project.", error);
