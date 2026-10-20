@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { useInView } from "react-intersection-observer";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import { ArrowUpWideNarrow } from "lucide-react";
 import { motion, MotionConfig } from "framer-motion";
@@ -29,6 +29,7 @@ const LifeInSquares = lazy(() => import("./components/pages/LifeInSquares"));
 const WorkExperience = lazy(() => import("./components/pages/WorkExperience"));
 const Education = lazy(() => import("./components/pages/Education"));
 const ContactBubbles = lazy(() => import("./components/pages/ContactBubbles"));
+const AdminApp = lazy(() => import("./admin/AdminApp"));
 
 const SectionFallback = () => <div className="min-h-[200px]" aria-hidden="true" />;
 
@@ -95,6 +96,8 @@ function HomePage() {
 
 function App() {
   const [visible, setVisible] = useState(false);
+  const location = useLocation();
+  const isAdminRoute = location.pathname === "/admin" || location.pathname.startsWith("/admin/");
 
   useEffect(() => {
     const handleScroll = () => setVisible(window.scrollY > 300);
@@ -125,48 +128,63 @@ function App() {
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion="user">
-        <ScrollToTop/>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            style: {
-              background: "#0d0d0d",
-              color: "#66d9ff",
-              border: "1px solid #3fc3ff",
-              fontWeight: "bold",
-            },
-            success: { iconTheme: { primary: "#00bcd4", secondary: "#0d0d0d" } },
-            error: { iconTheme: { primary: "#ff007a", secondary: "#0d0d0d" } },
-          }}
-        />
-        <main className=" font-sans antialiased max-w-[52rem] mx-auto py-12 sm:py-18 px-6  flex flex-col min-h-dvh space-y-10 mt-6 md:mt-0">
-          <Background />
-
-          <Navbar />
-          <Navbar2 />
-
+        {isAdminRoute ? (
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/links" element={<Links />} />
+            <Route
+              path="/admin/*"
+              element={
+                <Suspense fallback={<div className="min-h-screen animate-pulse" />}>
+                  <AdminApp />
+                </Suspense>
+              }
+            />
           </Routes>
+        ) : (
+          <>
+            <ScrollToTop/>
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: "#0d0d0d",
+                  color: "#66d9ff",
+                  border: "1px solid #3fc3ff",
+                  fontWeight: "bold",
+                },
+                success: { iconTheme: { primary: "#00bcd4", secondary: "#0d0d0d" } },
+                error: { iconTheme: { primary: "#ff007a", secondary: "#0d0d0d" } },
+              }}
+            />
+            <main className=" font-sans antialiased max-w-[52rem] mx-auto py-12 sm:py-18 px-6  flex flex-col min-h-dvh space-y-10 mt-6 md:mt-0">
+              <Background />
 
-          {/* <Cursor /> */}
-        </main>
+              <Navbar />
+              <Navbar2 />
 
-        <div className="fixed bottom-[6px] md:bottom-[-10px] left-[14px] pb-2 z-[9999]">
-          {visible && (
-            <motion.button
-              aria-label="Back to top"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 1.3, duration: 0.1 }}
-              className="relative group  rounded-full flex items-center justify-center  transition-colors shadow-lg overflow-hidden"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-              <ArrowUpWideNarrow className="w-6 h-6 md:w-9 md:h-9 text-cyan-500 group-hover:scale-110 transition-transform duration-300 ease-in-out" />
-            </motion.button>
-          )}
-        </div>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/links" element={<Links />} />
+              </Routes>
+
+              {/* <Cursor /> */}
+            </main>
+
+            <div className="fixed bottom-[6px] md:bottom-[-10px] left-[14px] pb-2 z-[9999]">
+              {visible && (
+                <motion.button
+                  aria-label="Back to top"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 1.3, duration: 0.1 }}
+                  className="relative group  rounded-full flex items-center justify-center  transition-colors shadow-lg overflow-hidden"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                >
+                  <ArrowUpWideNarrow className="w-6 h-6 md:w-9 md:h-9 text-cyan-500 group-hover:scale-110 transition-transform duration-300 ease-in-out" />
+                </motion.button>
+              )}
+            </div>
+          </>
+        )}
       </MotionConfig>
     </ThemeProvider>
   );
