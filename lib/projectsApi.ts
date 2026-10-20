@@ -1,8 +1,8 @@
 import type { Project } from '../types/project'
-import { supabase } from './supabase'
+import { getSupabaseClient } from './supabase'
 
 export async function fetchProjects(): Promise<Project[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabaseClient()
     .from('projects')
     .select('*')
     .eq('is_visible', true)

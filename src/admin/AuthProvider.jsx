@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { getSupabaseClient } from "../../lib/supabase";
 
 const AuthContext = createContext(null);
 
@@ -9,41 +9,51 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let isMounted = true;
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (isMounted) {
-        setSession(nextSession);
-        setLoading(false);
-      }
-    });
+    let subscription;
 
-    supabase.auth
-      .getSession()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        if (isMounted) setSession(data.session);
-      })
-      .catch((error) => {
-        console.error("Failed to restore the Supabase session.", error);
-      })
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
+    try {
+      const supabase = getSupabaseClient();
+      ({
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+        if (isMounted) {
+          setSession(nextSession);
+          setLoading(false);
+        }
+      }));
+
+      supabase.auth
+        .getSession()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          if (isMounted) setSession(data.session);
+        })
+        .catch((error) => {
+          console.error("Failed to restore the Supabase session.", error);
+        })
+        .finally(() => {
+          if (isMounted) setLoading(false);
+        });
+    } catch (error) {
+      console.error("Supabase authentication is unavailable.", error);
+      setLoading(false);
+    }
 
     return () => {
       isMounted = false;
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
   const signIn = useCallback(async (email, password) => {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     return data;
   }, []);
 
   const signOut = useCallback(async () => {
+    const supabase = getSupabaseClient();
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   }, []);
