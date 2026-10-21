@@ -8,11 +8,15 @@ export default function Hero() {
     <section id="hero">
       <div className=" w-full scroll-mt-20! ">
         <div className="gap-2 flex justify-between">
-          <div className='flex-col flex flex-1 space-y-1.5'>
-            <div className='flex'>
+          <div className="flex-col flex flex-1 space-y-1.5">
+            <div className="flex">
               <h1
-                className='inline-block text-2xl pb-0  font-bold tracking-tighter sm:text-4xl xl:text-5xl/none'
-                style={{ opacity: "1", filter: "blur(0px)", transform: "translateY(-8px)" }}
+                className="inline-block text-2xl pb-0  font-bold tracking-tighter sm:text-4xl xl:text-5xl/none"
+                style={{
+                  opacity: "1",
+                  filter: "blur(0px)",
+                  transform: "translateY(-8px)",
+                }}
               >
                 Hi, I'm Mahmoud 👋
               </h1>
@@ -33,7 +37,7 @@ export default function Hero() {
               Front-end Engineer building fast, motion-rich UIs by day, and
               growing{" "}
               <a
-                href="https://vt.tiktok.com/ZSXmWVn1x"
+                href="https://www.tiktok.com/@mahmoudfattah.dev"
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold"

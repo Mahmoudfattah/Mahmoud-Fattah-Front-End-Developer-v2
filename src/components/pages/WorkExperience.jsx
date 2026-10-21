@@ -95,7 +95,7 @@ function ExperienceItem({ item }) {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls={descId}
-              className="flex items-center gap-1.5"
+              className="flex items-center transition-all duration-75  gap-1.5"
             >
               {item.company}
               <ToggleArrow open={open} />
@@ -126,11 +126,21 @@ function ExperienceItem({ item }) {
           </span>
         </div>
 
-        {open && (
-          <p id={descId} className="mt-2 text-sm leading-5" style={{ color: "var(--text-gray)" }}>
-            {item.description}
-          </p>
-        )}
+        <div
+          id={descId}
+          aria-hidden={!open}
+          className="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
+          style={{
+            gridTemplateRows: open ? "1fr" : "0fr",
+            opacity: open ? 1 : 0,
+          }}
+        >
+          <div className="min-h-0 overflow-hidden">
+            <p className="mt-2 text-sm leading-5" style={{ color: "var(--text-gray)" }}>
+              {item.description}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

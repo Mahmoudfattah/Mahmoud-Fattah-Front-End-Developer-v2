@@ -1,0 +1,1 @@
+import{be as t}from"./chunk-vendor-BbCOC-2g.js";const s="https://htpddlhcqcvutzoowjet.supabase.co",a="sb_publishable_mGSPwhCwJSWDHhct78e6fA_9Vir8ro8";let e;function l(){return e||(e=t(s,a)),e}export{l as g};

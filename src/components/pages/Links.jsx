@@ -55,12 +55,12 @@ const professionalLinks = [
 const devFlowLinks = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/_dev_flow",
+    href: "https://www.instagram.com/mahmoudfattah.dev/",
     type: "instagram",
   },
   {
     name: "TikTok",
-    href: "https://www.tiktok.com/@dev_flow",
+    href: "https://www.tiktok.com/@mahmoudfattah.dev",
     type: "tiktok",
   },
   {
