@@ -79,6 +79,40 @@ export async function updateProject(id: string, data: ProjectChanges): Promise<P
   return throwIfNoRow(updated as Project | null, error);
 }
 
+export async function swapProjectOrder(firstId: string, secondId: string): Promise<Record<string, number>> {
+  const projects = await listAllProjects();
+  const firstIndex = projects.findIndex((project) => project.id === firstId);
+  const secondIndex = projects.findIndex((project) => project.id === secondId);
+
+  if (firstIndex < 0 || secondIndex < 0 || Math.abs(firstIndex - secondIndex) !== 1) {
+    throw new Error("Projects changed. Reload the list and try again.");
+  }
+
+  const first = projects[Math.min(firstIndex, secondIndex)];
+  const second = projects[Math.max(firstIndex, secondIndex)];
+  const temporaryOrder = Math.max(-1, ...projects.map((project) => project.sort_order)) + 1;
+
+  await updateProject(first.id, { sort_order: temporaryOrder });
+  try {
+    await updateProject(second.id, { sort_order: first.sort_order });
+    await updateProject(first.id, { sort_order: second.sort_order });
+  } catch (error) {
+    try {
+      await updateProject(second.id, { sort_order: second.sort_order });
+      await updateProject(first.id, { sort_order: first.sort_order });
+    } catch (rollbackError) {
+      console.error("Failed to restore project order after an unsuccessful reorder.", rollbackError);
+      throw new Error("Project order could not be saved or restored. Reload the projects before trying again.");
+    }
+    throw error;
+  }
+
+  return {
+    [first.id]: second.sort_order,
+    [second.id]: first.sort_order,
+  };
+}
+
 export async function deleteProject(id: string): Promise<Project> {
   const { data: deleted, error } = await getSupabaseClient()
     .from("projects")

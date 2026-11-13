@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertCircle,
+  ArrowDown,
+  ArrowUp,
   Check,
   ChevronDown,
   CirclePlus,
@@ -17,6 +19,7 @@ import {
   deleteStoredProjectImage,
   deleteProject,
   listAllProjects,
+  swapProjectOrder,
   updateProject,
 } from "./projectsAdminApi";
 import ProjectFormDrawer from "./ProjectFormDrawer";
@@ -134,6 +137,7 @@ export default function ProjectsPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [pendingIds, setPendingIds] = useState(() => new Set());
+  const [reordering, setReordering] = useState(false);
   const [toast, setToast] = useState(null);
 
   function showToast(type, message) {
@@ -259,6 +263,40 @@ export default function ProjectsPage() {
     }
   }
 
+  async function moveProject(project, direction) {
+    const index = projects.findIndex((item) => item.id === project.id);
+    const neighbor = projects[index + direction];
+    if (!neighbor || reordering || pendingIds.has(project.id) || pendingIds.has(neighbor.id)) return;
+
+    setReordering(true);
+    setPendingIds((current) => new Set(current).add(project.id).add(neighbor.id));
+    try {
+      const updatedOrders = await swapProjectOrder(project.id, neighbor.id);
+      setProjects((current) => current
+        .map((item) => updatedOrders[item.id] === undefined
+          ? item
+          : { ...item, sort_order: updatedOrders[item.id] })
+        .sort((left, right) => left.sort_order - right.sort_order));
+      showToast("success", `${project.title} moved ${direction < 0 ? "up" : "down"}.`);
+    } catch (error) {
+      console.error("Failed to reorder projects.", error);
+      try {
+        setProjects(await listAllProjects());
+      } catch (refreshError) {
+        console.error("Failed to refresh projects after an unsuccessful reorder.", refreshError);
+      }
+      showToast("error", error.message || "Could not reorder projects.");
+    } finally {
+      setReordering(false);
+      setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(project.id);
+        next.delete(neighbor.id);
+        return next;
+      });
+    }
+  }
+
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
@@ -281,32 +319,39 @@ export default function ProjectsPage() {
     }
   }
 
-  const projectRows = filteredProjects.map((project) => (
-    <tr key={project.id} className="border-t transition-colors hover:bg-[var(--color-bgtech-projects)]/40" style={{ borderColor: "var(--border-color)" }}>
-      <td className="px-5 py-3">
-        <div className="flex min-w-52 items-center gap-3">
-          <ProjectThumbnail project={project} />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">{project.title}</p>
-            <p className="mt-0.5 truncate text-xs" style={{ color: "var(--color-muted)" }}>{project.role}</p>
+  const projectRows = filteredProjects.map((project) => {
+    const orderIndex = projects.findIndex((item) => item.id === project.id);
+    const rowPending = pendingIds.has(project.id);
+    const reorderDisabled = reordering || rowPending;
+    return (
+      <tr key={project.id} className="border-t transition-colors hover:bg-[var(--color-bgtech-projects)]/40" style={{ borderColor: "var(--border-color)" }}>
+        <td className="px-5 py-3">
+          <div className="flex min-w-52 items-center gap-3">
+            <ProjectThumbnail project={project} />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">{project.title}</p>
+              <p className="mt-0.5 truncate text-xs" style={{ color: "var(--color-muted)" }}>{project.role}</p>
+            </div>
           </div>
-        </div>
-      </td>
-      <td className="px-4 py-3">
-        <StatusBadge project={project} onToggle={toggleStatus} disabled={pendingIds.has(project.id)} />
-      </td>
-      <td className="px-4 py-3">
-        <VisibilityToggle project={project} onToggle={toggleVisibility} disabled={pendingIds.has(project.id)} />
-      </td>
-      <td className="px-4 py-3 text-sm" style={{ color: "var(--color-muted)" }}>{project.tech_stack?.length ?? 0}</td>
-      <td className="px-4 py-3">
-        <div className="flex items-center justify-end gap-1">
-          <button type="button" onClick={() => openEdit(project)} aria-label={`Edit ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)]" style={{ color: "var(--color-muted)" }}><Pencil size={16} /></button>
-          <button type="button" onClick={() => setDeleteTarget(project)} aria-label={`Delete ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)]" style={{ color: "var(--color-third)" }}><Trash2 size={16} /></button>
-        </div>
-      </td>
-    </tr>
-  ));
+        </td>
+        <td className="px-4 py-3">
+          <StatusBadge project={project} onToggle={toggleStatus} disabled={rowPending} />
+        </td>
+        <td className="px-4 py-3">
+          <VisibilityToggle project={project} onToggle={toggleVisibility} disabled={rowPending} />
+        </td>
+        <td className="px-4 py-3 text-sm" style={{ color: "var(--color-muted)" }}>{project.tech_stack?.length ?? 0}</td>
+        <td className="px-4 py-3">
+          <div className="flex items-center justify-end gap-1">
+            <button type="button" onClick={() => moveProject(project, -1)} disabled={orderIndex === 0 || reorderDisabled} aria-label={`Move ${project.title} up`} title="Move up" className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:cursor-not-allowed disabled:opacity-40" style={{ color: "var(--color-muted)" }}><ArrowUp size={16} /></button>
+            <button type="button" onClick={() => moveProject(project, 1)} disabled={orderIndex === projects.length - 1 || reorderDisabled} aria-label={`Move ${project.title} down`} title="Move down" className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:cursor-not-allowed disabled:opacity-40" style={{ color: "var(--color-muted)" }}><ArrowDown size={16} /></button>
+            <button type="button" onClick={() => openEdit(project)} disabled={rowPending} aria-label={`Edit ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:opacity-40" style={{ color: "var(--color-muted)" }}><Pencil size={16} /></button>
+            <button type="button" onClick={() => setDeleteTarget(project)} disabled={rowPending} aria-label={`Delete ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:opacity-40" style={{ color: "var(--color-third)" }}><Trash2 size={16} /></button>
+          </div>
+        </td>
+      </tr>
+    );
+  });
 
   const projectCards = filteredProjects.map((project) => (
     <article key={project.id} className="rounded-xl border p-4" style={{ backgroundColor: "var(--color-bg-projects)", borderColor: "var(--border-color)" }}>
@@ -343,7 +388,7 @@ export default function ProjectsPage() {
           <h2 className="mt-1 text-2xl font-bold tracking-tight">Projects</h2>
           <p className="mt-2 text-sm" style={{ color: "var(--color-muted)" }}>Manage the projects displayed on your portfolio.</p>
         </div>
-        <button type="button" onClick={openCreate} className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:opacity-90" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
+        <button type="button" onClick={openCreate} disabled={reordering} className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:opacity-90 disabled:opacity-50" style={{ backgroundColor: "var(--color-primary)", color: "var(--color-bg)" }}>
           <CirclePlus size={17} />
           Add project
         </button>

@@ -40,7 +40,7 @@ export default function About() {
   </span>{" "}
   with{" "}
   <span className="font-semibold" style={{ color: "var(--color-text)" }}>
-    1+ year of production experience
+    2+ year of production experience
   </span>{" "}
   building scalable, high-performance web applications. I specialize in{" "}
   <a

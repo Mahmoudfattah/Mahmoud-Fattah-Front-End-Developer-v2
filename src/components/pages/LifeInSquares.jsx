@@ -6,9 +6,11 @@
 const photos = [
   {
     id: 1,
-    span: "col-span-2 md:row-span-2",
+    // خليناها row-span-2 عشان تاخد صفين على الموبايل ويبان وشك كامل
+    span: "col-span-2 row-span-2",
     src: "/Lifeinsequares/Curly-Haired Man in Black Hoodie.webp",
-    style: { objectPosition: "0px -20px" , scale: '1' },
+    // إحداثيات متجاوبة: على الموبايل بتبدأ من 15% من فوق، وعلى الديسكتوب بترجع لـ 0px -20px
+    imgClass: "object-[center_15%] md:object-[0px_-20px]",
   },
   { id: 2, span: "md:col-span-1", src: "/Lifeinsequares/17.webp" },
   { id: 3, span: "md:col-span-1", src: "/Lifeinsequares/7.webp" },
@@ -42,18 +44,43 @@ function PhotoTile({ photo }) {
           height={900}
           loading="lazy"
           decoding="async"
-          className="h-full w-full min-h-0 object-cover transition-transform duration-300 ease-in-out lg:hover:scale-105"
+          className={`h-full w-full min-h-0 object-cover transition-transform duration-300 ease-in-out lg:hover:scale-105 ${photo.imgClass || ""}`}
           style={photo.style}
         />
       ) : (
         <div
           className="flex h-full w-full items-center justify-center transition-transform duration-300 lg:hover:scale-105"
-          style={{ background: "linear-gradient(135deg, var(--color-bg-secondary), var(--color-second-dark))" }}
+          style={{
+            background:
+              "linear-gradient(135deg, var(--color-bg-secondary), var(--color-second-dark))",
+          }}
         >
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ color: "var(--color-muted)" }}>
-            <path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" stroke="currentColor" strokeWidth="1.5" />
-            <circle cx="9" cy="10" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="m4 17 5-5 3 3 4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            style={{ color: "var(--color-muted)" }}
+          >
+            <path
+              d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <circle
+              cx="9"
+              cy="10"
+              r="1.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="m4 17 5-5 3 3 4-4 4 4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
       )}
@@ -63,8 +90,11 @@ function PhotoTile({ photo }) {
 
 export default function LifeInSquares() {
   return (
-    <section id="life-in-squares" className="w-full  pb-2 sm:pb-0 ">
-      <h2 className="mb-1 text-xl font-bold" style={{ color: "var(--color-text)" }}>
+    <section id="life-in-squares" className="w-full pb-2 sm:pb-0">
+      <h2
+        className="mb-1 text-xl font-bold"
+        style={{ color: "var(--color-text)" }}
+      >
         Life in Squares
       </h2>
 
