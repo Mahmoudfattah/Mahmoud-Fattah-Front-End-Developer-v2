@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertCircle,
-  ArrowDown,
-  ArrowUp,
   Check,
   ChevronDown,
   CirclePlus,
   Eye,
   EyeOff,
+  GripVertical,
   LoaderCircle,
   Pencil,
   Search,
@@ -138,6 +137,8 @@ export default function ProjectsPage() {
   const [deleting, setDeleting] = useState(false);
   const [pendingIds, setPendingIds] = useState(() => new Set());
   const [reordering, setReordering] = useState(false);
+  const [draggedProjectId, setDraggedProjectId] = useState(null);
+  const [dropTarget, setDropTarget] = useState(null);
   const [toast, setToast] = useState(null);
 
   function showToast(type, message) {
@@ -263,21 +264,47 @@ export default function ProjectsPage() {
     }
   }
 
-  async function moveProject(project, direction) {
-    const index = projects.findIndex((item) => item.id === project.id);
-    const neighbor = projects[index + direction];
-    if (!neighbor || reordering || pendingIds.has(project.id) || pendingIds.has(neighbor.id)) return;
+  async function reorderProject(draggedId, targetId, position) {
+    const fromIndex = projects.findIndex((item) => item.id === draggedId);
+    const targetIndex = projects.findIndex((item) => item.id === targetId);
+    if (fromIndex < 0 || targetIndex < 0 || reordering) return;
+
+    let destinationIndex = targetIndex + (position === "after" ? 1 : 0);
+    if (destinationIndex > fromIndex) destinationIndex -= 1;
+    if (destinationIndex === fromIndex) return;
+
+    const affectedProjects = projects.slice(
+      Math.min(fromIndex, destinationIndex),
+      Math.max(fromIndex, destinationIndex) + 1,
+    );
+    if (affectedProjects.some((item) => pendingIds.has(item.id))) return;
+
+    const reorderedProjects = [...projects];
+    const [draggedProject] = reorderedProjects.splice(fromIndex, 1);
+    reorderedProjects.splice(destinationIndex, 0, draggedProject);
+    const reorderedProjectOrders = reorderedProjects.map((item, index) => ({
+      ...item,
+      sort_order: projects[index].sort_order,
+    }));
 
     setReordering(true);
-    setPendingIds((current) => new Set(current).add(project.id).add(neighbor.id));
+    setPendingIds((current) => {
+      const next = new Set(current);
+      affectedProjects.forEach((item) => next.add(item.id));
+      return next;
+    });
+    setProjects(reorderedProjectOrders);
     try {
-      const updatedOrders = await swapProjectOrder(project.id, neighbor.id);
-      setProjects((current) => current
-        .map((item) => updatedOrders[item.id] === undefined
-          ? item
-          : { ...item, sort_order: updatedOrders[item.id] })
-        .sort((left, right) => left.sort_order - right.sort_order));
-      showToast("success", `${project.title} moved ${direction < 0 ? "up" : "down"}.`);
+      if (fromIndex < destinationIndex) {
+        for (let index = fromIndex; index < destinationIndex; index += 1) {
+          await swapProjectOrder(draggedId, projects[index + 1].id);
+        }
+      } else {
+        for (let index = fromIndex; index > destinationIndex; index -= 1) {
+          await swapProjectOrder(draggedId, projects[index - 1].id);
+        }
+      }
+      showToast("success", `${draggedProject.title} reordered.`);
     } catch (error) {
       console.error("Failed to reorder projects.", error);
       try {
@@ -290,10 +317,34 @@ export default function ProjectsPage() {
       setReordering(false);
       setPendingIds((current) => {
         const next = new Set(current);
-        next.delete(project.id);
-        next.delete(neighbor.id);
+        affectedProjects.forEach((item) => next.delete(item.id));
         return next;
       });
+    }
+  }
+
+  function handleRowDragOver(event, projectId) {
+    if (!draggedProjectId || draggedProjectId === projectId || reordering) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const position = event.clientY < bounds.top + bounds.height / 2 ? "before" : "after";
+    setDropTarget((current) => (
+      current?.projectId === projectId && current.position === position
+        ? current
+        : { projectId, position }
+    ));
+  }
+
+  function handleRowDrop(event, projectId) {
+    event.preventDefault();
+    const draggedId = event.dataTransfer.getData("text/plain") || draggedProjectId;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const position = event.clientY < bounds.top + bounds.height / 2 ? "before" : "after";
+    setDropTarget(null);
+    if (draggedId && draggedId !== projectId) {
+      void reorderProject(draggedId, projectId, position);
     }
   }
 
@@ -320,11 +371,24 @@ export default function ProjectsPage() {
   }
 
   const projectRows = filteredProjects.map((project) => {
-    const orderIndex = projects.findIndex((item) => item.id === project.id);
     const rowPending = pendingIds.has(project.id);
     const reorderDisabled = reordering || rowPending;
+    const isDragged = draggedProjectId === project.id;
+    const targetPosition = dropTarget?.projectId === project.id ? dropTarget.position : null;
     return (
-      <tr key={project.id} className="border-t transition-colors hover:bg-[var(--color-bgtech-projects)]/40" style={{ borderColor: "var(--border-color)" }}>
+      <tr
+        key={project.id}
+        onDragOver={(event) => handleRowDragOver(event, project.id)}
+        onDrop={(event) => handleRowDrop(event, project.id)}
+        className={`border-t transition-colors hover:bg-[var(--color-bgtech-projects)]/40 ${isDragged ? "opacity-50" : ""}`}
+        style={{
+          borderColor: "var(--border-color)",
+          backgroundColor: targetPosition ? "var(--color-bgtech-projects)" : undefined,
+          boxShadow: targetPosition
+            ? `inset 0 ${targetPosition === "before" ? "2px" : "-2px"} 0 var(--color-primary)`
+            : undefined,
+        }}
+      >
         <td className="px-5 py-3">
           <div className="flex min-w-52 items-center gap-3">
             <ProjectThumbnail project={project} />
@@ -343,8 +407,30 @@ export default function ProjectsPage() {
         <td className="px-4 py-3 text-sm" style={{ color: "var(--color-muted)" }}>{project.tech_stack?.length ?? 0}</td>
         <td className="px-4 py-3">
           <div className="flex items-center justify-end gap-1">
-            <button type="button" onClick={() => moveProject(project, -1)} disabled={orderIndex === 0 || reorderDisabled} aria-label={`Move ${project.title} up`} title="Move up" className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:cursor-not-allowed disabled:opacity-40" style={{ color: "var(--color-muted)" }}><ArrowUp size={16} /></button>
-            <button type="button" onClick={() => moveProject(project, 1)} disabled={orderIndex === projects.length - 1 || reorderDisabled} aria-label={`Move ${project.title} down`} title="Move down" className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:cursor-not-allowed disabled:opacity-40" style={{ color: "var(--color-muted)" }}><ArrowDown size={16} /></button>
+            <button
+              type="button"
+              draggable={!reorderDisabled}
+              aria-disabled={reorderDisabled}
+              aria-label={`Drag to reorder ${project.title}`}
+              title="Drag to reorder"
+              onDragStart={(event) => {
+                if (reorderDisabled) {
+                  event.preventDefault();
+                  return;
+                }
+                event.dataTransfer.effectAllowed = "move";
+                event.dataTransfer.setData("text/plain", project.id);
+                setDraggedProjectId(project.id);
+              }}
+              onDragEnd={() => {
+                setDraggedProjectId(null);
+                setDropTarget(null);
+              }}
+              className="cursor-grab rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] active:cursor-grabbing aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+              style={{ color: "var(--color-muted)" }}
+            >
+              <GripVertical size={16} />
+            </button>
             <button type="button" onClick={() => openEdit(project)} disabled={rowPending} aria-label={`Edit ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:opacity-40" style={{ color: "var(--color-muted)" }}><Pencil size={16} /></button>
             <button type="button" onClick={() => setDeleteTarget(project)} disabled={rowPending} aria-label={`Delete ${project.title}`} className="rounded-lg p-2 transition hover:bg-[var(--color-bgtech-projects)] disabled:opacity-40" style={{ color: "var(--color-third)" }}><Trash2 size={16} /></button>
           </div>

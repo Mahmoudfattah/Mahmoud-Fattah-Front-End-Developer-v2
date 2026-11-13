@@ -79,7 +79,7 @@ export async function updateProject(id: string, data: ProjectChanges): Promise<P
   return throwIfNoRow(updated as Project | null, error);
 }
 
-export async function swapProjectOrder(firstId: string, secondId: string): Promise<Record<string, number>> {
+export async function swapProjectOrder(firstId: string, secondId: string): Promise<void> {
   const projects = await listAllProjects();
   const firstIndex = projects.findIndex((project) => project.id === firstId);
   const secondIndex = projects.findIndex((project) => project.id === secondId);
@@ -106,11 +106,6 @@ export async function swapProjectOrder(firstId: string, secondId: string): Promi
     }
     throw error;
   }
-
-  return {
-    [first.id]: second.sort_order,
-    [second.id]: first.sort_order,
-  };
 }
 
 export async function deleteProject(id: string): Promise<Project> {
